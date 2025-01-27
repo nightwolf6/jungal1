@@ -23,7 +23,6 @@ public class DemoApplication {
 		// Cargar variables desde .env
 		Dotenv dotenv = Dotenv.configure()
 				.directory("/src/main/resources")
-				.filename(".env")
 				.load();
 		System.setProperty("DB_HOST", System.getenv("DB_HOST"));
 		System.setProperty("DB_PORT", System.getenv("DB_PORT"));
