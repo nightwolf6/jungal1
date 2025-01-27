@@ -25,12 +25,12 @@ public class DemoApplication {
 				.directory("/src/main/resources")
 				.filename(".env")
 				.load();
-		System.setProperty("DB_HOST", dotenv.get("DB_HOST"));
-		System.setProperty("DB_PORT", dotenv.get("DB_PORT"));
-		System.setProperty("DB_NAME", dotenv.get("DB_NAME"));
-		System.setProperty("DB_USER", dotenv.get("DB_USER"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
-		System.setProperty("SERVER_PORT", dotenv.get("SERVER_PORT"));
+		System.setProperty("DB_HOST", System.getenv("DB_HOST"));
+		System.setProperty("DB_PORT", System.getenv("DB_PORT"));
+		System.setProperty("DB_NAME", System.getenv("DB_NAME"));
+		System.setProperty("DB_USER", System.getenv("DB_USER"));
+		System.setProperty("DB_PASSWORD", System.getenv("DB_PASSWORD"));
+		System.setProperty("SERVER_PORT", System.getenv("SERVER_PORT"));
 		SpringApplication.run(DemoApplication.class, args);
 	}
 	@Bean
