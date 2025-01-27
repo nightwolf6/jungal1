@@ -56,3 +56,7 @@ processResources {
 		include ".env"
 	}
 }
+
+tasks.named('processResources') {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
