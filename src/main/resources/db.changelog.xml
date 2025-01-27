@@ -1,0 +1,310 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- ChangeSet para crear la tabla de roles -->
+    <changeSet id="createRolesTable" author="yourname">
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet para insertar los roles iniciales -->
+    <changeSet id="insertInitialRoles" author="yourname">
+        <insert tableName="roles">
+            <column name="id" value="1"/>
+            <column name="role_name" value="ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="2"/>
+            <column name="role_name" value="REGISTERED_USER"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="3"/>
+            <column name="role_name" value="GUEST_USER"/>
+        </insert>
+    </changeSet>
+
+    <!-- ChangeSet para crear la tabla de usuarios -->
+    <changeSet id="createUsersTable" author="yourname">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_user_role"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <!-- ChangeSet para crear la tabla de permisos -->
+    <changeSet id="createPermissionsTable" author="yourname">
+        <createTable tableName="permissions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="permission_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <!-- ChangeSet para crear la tabla de paquetes turísticos -->
+    <changeSet id="createTourPackagesTable" author="Pablo Armijos">
+        <createTable tableName="tour_packages">
+            <column name="package_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="package_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_days" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Agregar más columnas según sea necesario -->
+        </createTable>
+    </changeSet>
+    <!-- ChangeSet para crear la tabla de itinerarios -->
+    <changeSet id="createItinerariesTable" author="Pablo Armijos">
+        <createTable tableName="itineraries">
+            <column name="itinerary_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tour_package_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="day_number" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Agregar más columnas según sea necesario -->
+        </createTable>
+        <addForeignKeyConstraint baseTableName="itineraries"
+                                 baseColumnNames="tour_package_id"
+                                 constraintName="fk_itinerary_tour_package"
+                                 referencedTableName="tour_packages"
+                                 referencedColumnNames="package_id"/>
+    </changeSet>
+    <changeSet id="createReviewsTable" author="Pablo Armijos">
+        <createTable tableName="reviews">
+            <column name="review_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tour_package_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="reviews"
+                                 baseColumnNames="tour_package_id"
+                                 constraintName="fk_review_tour_package"
+                                 referencedTableName="tour_packages"
+                                 referencedColumnNames="package_id"/>
+    </changeSet>
+    <!-- Add email column to users table -->
+    <changeSet id="addEmailToUsers" author="Pablo Armijos">
+        <addColumn tableName="users">
+            <column name="email" type="VARCHAR(255)">
+            </column>
+        </addColumn>
+    </changeSet>
+    <!-- ChangeSet para crear la tabla de bookings -->
+    <changeSet id="createBookingsTable" author="Pablo Armijos">
+        <createTable tableName="bookings">
+            <column name="booking_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tour_package_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="itinerary_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="booking_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="bookings"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_booking_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="bookings"
+                                 baseColumnNames="tour_package_id"
+                                 constraintName="fk_booking_tour_package"
+                                 referencedTableName="tour_packages"
+                                 referencedColumnNames="package_id"/>
+        <addForeignKeyConstraint baseTableName="bookings"
+                                 baseColumnNames="itinerary_id"
+                                 constraintName="fk_booking_itinerary"
+                                 referencedTableName="itineraries"
+                                 referencedColumnNames="itinerary_id"/>
+    </changeSet>
+    <changeSet id="addUserIdToReviews" author="Pablo Armijos">
+        <addColumn tableName="reviews">
+            <column name="user_id" type="BIGINT" />
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="reviews"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_review_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id" />
+    </changeSet>
+    <changeSet id="createImagesTable" author="Pablo Armijos">
+        <createTable tableName="images">
+            <column name="image_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="filename" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filepath" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="addFieldsToBookingsAndItineraries" author="Pablo Armijos">
+        <!-- Agregar columnas 'number_of_passengers' y 'total_price' a la tabla bookings -->
+        <addColumn tableName="bookings">
+            <column name="number_of_passengers" type="INTEGER" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_price" type="DOUBLE PRECISION" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <!-- Agregar columna 'price_per_passenger' a la tabla itineraries -->
+        <addColumn tableName="itineraries">
+            <column name="price_per_passenger" type="DOUBLE PRECISION" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="addIdentityPassportAndPhotoToUsers" author="Pablo Armijos">
+        <!-- Paso 1: Agregar la columna como nullable -->
+        <addColumn tableName="users">
+            <column name="identity_or_passport" type="VARCHAR(15)"/>
+            <column name="photo" type="BYTEA">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="updateIdentityOrPassportValues" author="Pablo Armijos">
+        <!-- Paso 2: Rellenar los valores existentes (puedes personalizar el valor predeterminado si lo necesitas) -->
+        <sql>
+            UPDATE users SET identity_or_passport = 'DEFAULT_VALUE' WHERE identity_or_passport IS NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="setIdentityPassportNotNull" author="Pablo Armijos">
+        <!-- Paso 3: Cambiar la columna para que sea NOT NULL -->
+        <modifyDataType tableName="users" columnName="identity_or_passport" newDataType="VARCHAR(15)"/>
+        <addNotNullConstraint tableName="users" columnName="identity_or_passport"/>
+    </changeSet>
+    <changeSet id="createCheckinsTable" author="Pablo Armijos">
+        <createTable tableName="checkins">
+            <column name="checkin_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="accepted_facial_recognition" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="facial_recognition_approved" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="checkin_completed" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="new_photo" type="BYTEA">
+                <constraints nullable="true"/>
+            </column>
+            <column name="latitude" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+            <column name="altitude" type="DOUBLE PRECISION">
+                <constraints nullable="true"/>
+            </column>
+            <column name="checkin_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="itinerary_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="booking_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="checkins"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_checkin_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="checkins"
+                                 baseColumnNames="itinerary_id"
+                                 constraintName="fk_checkin_itinerary"
+                                 referencedTableName="itineraries"
+                                 referencedColumnNames="itinerary_id"/>
+        <addForeignKeyConstraint baseTableName="checkins"
+                                 baseColumnNames="booking_id"
+                                 constraintName="fk_checkin_booking"
+                                 referencedTableName="bookings"
+                                 referencedColumnNames="booking_id"/>
+    </changeSet>
+    <changeSet id="add-verification-fields-to-user" author="PabloArmijos">
+        <addColumn tableName="users">
+            <column name="verification_token" type="VARCHAR(255)" />
+            <column name="verified" type="BOOLEAN" defaultValue="false" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="add-image-identifier" author="Pablo Armijos">
+        <addColumn tableName="users">
+            <column name="image_identifier" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
