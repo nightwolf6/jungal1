@@ -108,6 +108,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.Properties;
 
+
 @Configuration
 @EnableWebSecurity
 public class ConfigJungal {
@@ -188,4 +189,5 @@ public class ConfigJungal {
 
         return mailSender;
     }
+
 }

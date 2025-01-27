@@ -43,6 +43,7 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.postgresql:postgresql:42.5.4'
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 
 }
 
