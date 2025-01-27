@@ -1,0 +1,7 @@
+services:
+  - name: jungal
+    type: web  # El tipo del servicio es web
+    runtime: static  # Especifica la versión de Java que deseas usar
+    buildCommand: './gradlew build'  # Comando para construir la aplicación
+    startCommand: 'java -jar build/libs/jungal-0.0.1-SNAPSHOT.jar'  # Comando para iniciar el JAR
+    plan: free
