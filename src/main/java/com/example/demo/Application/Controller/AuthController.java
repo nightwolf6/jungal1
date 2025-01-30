@@ -239,4 +239,39 @@ public class AuthController {
             return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("Invalid username or password");
         }
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        try {
+            // Buscar el usuario existente
+            User existingUser = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Actualizar los campos del usuario
+            existingUser.setUsername(updatedUser.getUsername());
+
+            // Si se proporciona una nueva contraseña, la actualizamos
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+
+            existingUser.setEnabled(updatedUser.isEnabled());
+            existingUser.setRole(updatedUser.getRole());
+            existingUser.setEmail(updatedUser.getEmail());
+
+            // Si se incluye una nueva foto, también se actualiza
+            if (updatedUser.getPhoto() != null) {
+                existingUser.setPhoto(updatedUser.getPhoto());
+            }
+
+            // Guardar los cambios en la base de datos
+            userRepository.save(existingUser);
+
+            return ResponseEntity.ok("User updated successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user: " + e.getMessage());
+        }
+    }
+
 }
