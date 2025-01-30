@@ -34,10 +34,10 @@ public class DemoApplication {
 						.maxAge(3600);
 			}
 
-			public void addResourceHandlers(ResourceHandlerRegistry registry) {
+/*			public void addResourceHandlers(ResourceHandlerRegistry registry) {
 				registry.addResourceHandler("/images/**")
 						.addResourceLocations("file:C:/PROYECTO FINAL/images/");
-			}
+			}*/
 		};
 	}
 }

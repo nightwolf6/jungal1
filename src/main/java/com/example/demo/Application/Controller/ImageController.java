@@ -46,7 +46,7 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/{id}")
+/*   @GetMapping("/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
         Image image = imageService.getImageById(id);
         if (image != null) {
@@ -59,6 +59,16 @@ public class ImageController {
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }*/
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getImage(@PathVariable Long id) {
+        Image image = imageService.getImageById(id);
+        if (image != null) {
+            // Devuelve la URL de Cloudinary directamente
+            return new ResponseEntity<>(image.getFilepath(), HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
